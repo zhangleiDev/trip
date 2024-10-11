@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>携程</title>
+    <!-- 移动端一般将最小宽度设置为320px，将最大宽度设置为750px -->
+    <style type="text/css">
+      body {
+        max-width: 540px;
+        min-width: 320px;
+        margin: 0 auto;
+        font: normal 14px/1.5 Tahoma, Verdana, 'Microsoft YaHei', STXihei, hei;
+        color: #000;
+        background: #f2f2f2;
+        overflow-x: hidden;
+        -webkit-tap-highlight-color: transparent;
+      }
+      a {
+        text-decoration: none;
+        color: #222;
+      }
+      div {
+        /** 当你将box-sizing设置为border-box时，
+        元素的宽度和高度将包括内容、内边距和边框，但不包括外边距。
+        这意味着，如果你再次设置一个元素的宽度为100px，
+        并给它添加了10px的内边距和边框，
+        那么该元素将仍然只占据100px的宽度，
+        因为内边距和边框的宽度会从内容的宽度中减去。*/
+        box-sizing: border-box;
+      }
+      .search-index {
+        display: flex;
+        /*** 固定定位，相对于浏览器窗口进行定位 */
+        position: relative;
+        top: 0;
+        left: 50%;
+        /*** 水平居中,相对自身向左移动自身宽度的50% */
+        transform: translateX(-50%);
+        /** 固定定位的盒子需要给出宽度*/
+        width: 100%;
+        height: 44px;
+        max-width: 540px;
+        min-width: 320px;
+        background-color: #f6f6f6;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+      }
+      .search {
+        flex: 1;
+        height: 30px;
+        line-height: 28px; /** 垂直居中 行高减去上下两个边框的高度 */
+        border: 1px, solid #ccc;
+        margin: 7px 10px;
+        border-radius: 5px;
+        padding-left: 30px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .search::before {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        content: '';
+        background: url('./images/sprite.png') no-repeat -60px -280px;
+        background-size: 104px auto;
+        width: 13px;
+        height: 13px;
+      }
+      .user {
+        height: 44px;
+        width: 44px;
+        font-size: 12px;
+        text-align: center;
+        color: #2eaae0;
+      }
+      .user::before {
+        content: '';
+        display: block;
+        background: url('./images/sprite.png') no-repeat -59px -195px;
+        background-size: 104px 328px;
+        width: 22px;
+        height: 24px;
+        margin: 5px auto -2px auto;
+      }
+      .focus {
+        margin-top: 5px;
+        padding-top: 20px;
+      }
+      .focus img {
+        width: 100%;
+      }
+      ul {
+        /** 去除li的小圆点 */
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .top-nav {
+        display: flex;
+        justify-content: space-around;
+        height: 64px;
+        background-color: #fff;
+        margin: 3px 4px;
+        border-radius: 5px;
+      }
+      .top-nav li {
+        flex: 1;
+      }
+      .top-nav li a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 12px;
+      }
+      .top-nav-icon {
+        width: 32px;
+        height: 32px;
+        background-color: #5b4949;
+        margin-top: 8px;
+      }
+      .top-nav-icon1 {
+        background: url('./images/localnav_bg.png') no-repeat 0px 0;
+        background-size: 32px auto;
+      }
+      .top-nav-icon2 {
+        background: url('./images/localnav_bg.png') no-repeat 0px -32px;
+        background-size: 32px auto;
+      }
+      .top-nav-icon3 {
+        background: url('./images/localnav_bg.png') no-repeat 0px -64px;
+        background-size: 32px auto;
+      }
+      .top-nav-icon4 {
+        background: url('./images/localnav_bg.png') no-repeat 0px -96px;
+        background-size: 32px auto;
+      }
+      .top-nav-icon5 {
+        background: url('./images/localnav_bg.png') no-repeat 0px -128px;
+        background-size: 32px auto;
+      }
+      nav {
+        border-radius: 8px;
+        margin: 0 4px 4px;
+        overflow: hidden;
+      }
+      .nav-common {
+        display: flex;
+        justify-content: space-between;
+        height: 88px;
+        background-color: #b39c87;
+      }
+      .nav-common:nth-child(2) {
+        margin-top: 3px;
+        margin-bottom: 3px;
+      }
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+      }
+      .nav-item a {
+        flex: 1;
+        line-height: 42px;
+        border-bottom: 1px solid #fff;
+        width: 100%;
+        text-align: center;
+        color: white;
+        font-size: 14px;
+        text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+      }
+      .nav-item:nth-child(-n + 2) {
+        border-right: 1px solid #fff;
+      }
+      .nav-item1 {
+        background: url('./images/hotel.png') no-repeat bottom center;
+        background-size: 121px;
+      }
+      .nav-item2 {
+        background: url('./images/plane.png') no-repeat bottom center;
+      }
+      .nav-item3 {
+        background: url('./images/trip.png') no-repeat bottom center;
+        background-size: 60px;
+      }
+      .nav-common:nth-child(1) {
+        background: -webkit-linear-gradient(left, #fa5a55, #fa994d);
+      }
+      .nav-common:nth-child(2) {
+        background: -webkit-linear-gradient(left, #4d99f4, #50bcf1);
+      }
+      .nav-common:nth-child(3) {
+        background: -webkit-linear-gradient(left, #2bbbb1, #6ccb61);
+      }
+
+      .sub-nav {
+        display: flex;
+        align-content: center;
+        flex-wrap: wrap;
+        height: 128px;
+        background-color: #fff;
+        border-radius: 7px;
+        margin: 0, 4px;
+        overflow: hidden;
+      }
+      .sub-nav li {
+        /* 可以写百分比,相对于父级来说,占父级的宽度比例 */
+        flex: 20%;
+        height: 64px;
+      }
+      .sub-nav-li a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .sub-nav-li a span:nth-child(1) {
+        width: 32px;
+        height: 32px;
+        margin-top: 6px;
+        margin-bottom: -6px;
+      }
+      .sub-nav-li a span:nth-child(2) {
+        height: 32px;
+        line-height: 32px;
+        font-size: 14px;
+      }
+      .sub-nav-li1 a span:nth-child(1) {
+        width: 32px;
+        height: 32px;
+        background: url('./images/subnav-bg.png') no-repeat 0px 6px;
+        background-size: 32px auto;
+      }
+      .sub-nav-li2 a span:nth-child(1) {
+        width: 32px;
+        height: 32px;
+        background: url('./images/subnav-bg.png') no-repeat 0px -30px;
+        background-size: 32px auto;
+      }
+      .sub-nav-li3 a span:nth-child(1) {
+        width: 32px;
+        height: 32px;
+        background: url('./images/subnav-bg.png') no-repeat 0px -69px;
+        background-size: 32px auto;
+      }
+      .sub-nav-li4 a span:nth-child(1) {
+        width: 32px;
+        height: 32px;
+        background: url('./images/subnav-bg.png') no-repeat 0px -367px;
+        background-size: 32px auto;
+      }
+      .sub-nav-li5 a span:nth-child(1) {
+        width: 32px;
+        height: 32px;
+        background: url('./images/subnav-bg.png') no-repeat 0px -109px;
+        background-size: 32px auto;
+      }
+
+      .sub-nav-li6 a span:nth-child(1) {
+        width: 32px;
+        height: 32px;
+        background: url('./images/subnav-bg.png') no-repeat 5px -185px;
+        background-size: 32px auto;
+      }
+      .sub-nav-li7 a span:nth-child(1) {
+        width: 32px;
+        height: 32px;
+        background: url('./images/subnav-bg.png') no-repeat 0px -224px;
+        background-size: 32px auto;
+      }
+      .sub-nav-li8 a span:nth-child(1) {
+        width: 32px;
+        height: 32px;
+        background: url('./images/subnav-bg.png') no-repeat 0px -149px;
+        background-size: 32px auto;
+      }
+      .sub-nav-li9 a span:nth-child(1) {
+        width: 32px;
+        height: 32px;
+        background: url('./images/subnav-bg.png') no-repeat 0px -259px;
+        background-size: 32px auto;
+      }
+      .sub-nav-li10 a span:nth-child(1) {
+        width: 32px;
+        height: 32px;
+        background: url('./images/subnav-bg.png') no-repeat 4px -325px;
+        background-size: 32px auto;
+      }
+      .sales-box {
+        border-top: 1px solid #bbb;
+        margin: 4px;
+        background-color: #fff;
+      }
+      .sales-hd {
+        position: relative;
+        height: 44px;
+        border-bottom: 1px solid #ccc;
+      }
+      .sales-hd span:nth-child(1) {
+        position: absolute;
+        display: block;
+        height: 20px;
+        width: 79px;
+        background: url('./images/hot.png') no-repeat 0 -16px;
+        background-size: 80px;
+        margin: 10px auto auto 10px;
+      }
+      .sales-hd span:nth-child(2) {
+        position: absolute;
+        right: 5px;
+        top: 8px;
+        background: -webkit-linear-gradient(left, #ff506c, #ff6bc6);
+        border-radius: 9px;
+        padding: 3px 20px 3px 10px;
+      }
+      .sales-hd span:nth-child(2)::after {
+        content: '';
+        position: absolute;
+        top: 8px;
+        right: 9px;
+        width: 7px;
+        height: 7px;
+        border-top: 2px solid #fff;
+        border-right: 2px solid #fff;
+        transform: rotate(45deg);
+      }
+      .sales-bd {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .sales-bd div {
+        flex: 50%;
+        border: 1px solid #bbb;
+      }
+      .sales-bd div:nth-child(-n + 2) img {
+        height: 160px;
+        width: 100%;
+      }
+      .sales-bd div:nth-child(n + 3) img {
+        height: 90px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 搜索部分 -->
+    <div class="search-index">
+      <div class="search">搜索:目的地/航班/酒店/景点</div>
+      <a href="#" class="user">我 的</a>
+    </div>
+    <!-- 焦点图 -->
+    <div class="focus">
+      <img src="./images/focus.jpg" alt="" />
+    </div>
+    <!-- 顶部导航 -->
+    <ul class="top-nav">
+      <li>
+        <a href="#" title="景点·玩乐">
+          <span class="top-nav-icon top-nav-icon1"></span>
+          <span>景点·玩乐</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="周边游">
+          <span class="top-nav-icon top-nav-icon2"></span>
+          <span>周边游</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="美食林">
+          <span class="top-nav-icon top-nav-icon3"></span>
+          <span>美食林</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="一日游">
+          <span class="top-nav-icon top-nav-icon4"></span>
+          <span>一日游</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" title="当地攻略">
+          <span class="top-nav-icon top-nav-icon5"></span>
+          <span>当地攻略</span>
+        </a>
+      </li>
+    </ul>
+    <!--主导航栏-->
+    <nav>
+      <div class="nav-common">
+        <div class="nav-item nav-item1">
+          <a href="">海外酒店</a>
+        </div>
+        <div class="nav-item">
+          <a href="">海外酒店</a>
+          <a href="">特价酒店</a>
+        </div>
+        <div class="nav-item">
+          <a href="">团购</a>
+          <a href="">民宿·客栈</a>
+        </div>
+      </div>
+      <div class="nav-common">
+        <div class="nav-item nav-item2">
+          <a href="">机票</a>
+        </div>
+        <div class="nav-item">
+          <a href="">火车票</a>
+          <a href="">特价机票</a>
+        </div>
+        <div class="nav-item">
+          <a href="">汽车票·船票</a>
+          <a href="">专车·租车</a>
+        </div>
+      </div>
+      <div class="nav-common">
+        <div class="nav-item nav-item3">
+          <a href="">旅游</a>
+        </div>
+        <div class="nav-item">
+          <a href="">门票</a>
+          <a href="">目的地攻略</a>
+        </div>
+        <div class="nav-item">
+          <a href="">游轮旅行</a>
+          <a href="">定制旅行</a>
+        </div>
+      </div>
+    </nav>
+    <ul class="sub-nav">
+      <li class="sub-nav-li sub-nav-li1">
+        <a href="#" title="wifi电话卡">
+          <span></span>
+          <span>wifi电话卡</span>
+        </a>
+      </li>
+      <li class="sub-nav-li sub-nav-li2">
+        <a href="#" title="保险·签证">
+          <span></span>
+          <span>保险·签证</span>
+        </a>
+      </li>
+      <li class="sub-nav-li sub-nav-li3">
+        <a href="#" title="外币兑换">
+          <span></span>
+          <span>外币兑换</span>
+        </a>
+      </li>
+      <li class="sub-nav-li sub-nav-li4">
+        <a href="#" title="购物">
+          <span></span>
+          <span>购物</span>
+        </a>
+      </li>
+      <li class="sub-nav-li sub-nav-li5">
+        <a href="#" title="当地向导">
+          <span></span>
+          <span>当地向导</span>
+        </a>
+      </li>
+      <li class="sub-nav-li sub-nav-li6">
+        <a href="#" title="自由行">
+          <span></span>
+          <span>自由行</span>
+        </a>
+      </li>
+      <li class="sub-nav-li sub-nav-li7">
+        <a href="#" title="境外玩乐">
+          <span></span>
+          <span>境外玩乐</span>
+        </a>
+      </li>
+      <li class="sub-nav-li sub-nav-li8">
+        <a href="#" title="礼品卡">
+          <span></span>
+          <span>礼品卡</span>
+        </a>
+      </li>
+      <li class="sub-nav-li sub-nav-li9">
+        <a href="#" title="信用卡">
+          <span></span>
+          <span>信用卡</span>
+        </a>
+      </li>
+      <li class="sub-nav-li sub-nav-li10">
+        <a href="#" title="更多">
+          <span></span>
+          <span>更多</span>
+        </a>
+      </li>
+    </ul>
+    <div class="sales-box">
+      <div class="sales-hd">
+        <span></span>
+        <span> 获取更多福利 </span>
+      </div>
+      <div class="sales-bd">
+        <div>
+          <img src="./images/pic1.jpg" alt="" />
+        </div>
+        <div>
+          <img src="./images/pic2.jpg" alt="" />
+        </div>
+        <div>
+          <img src="./images/pic3.jpg" alt="" />
+        </div>
+        <div>
+          <img src="./images/pic4.jpg" alt="" />
+        </div>
+        <div>
+          <img src="./images/pic5.jpg" alt="" />
+        </div>
+        <div>
+          <img src="./images/pic6.jpg" alt="" />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
