@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        /* 给父级元素设置弹性布局,子元素也会变成弹性布局 */
+        display: flex;
+        width: 800px;
+        height: 300px;
+        background-color: #ebe7d1;
+        border: 2px solid #000;
+      }
+      #div1 {
+        /* 主轴默认是水平方向,flex-direction: row; 
+        元素是跟随主轴排列的,如果主轴是水平方向,子元素就会按照从左到右的顺序排列
+        */
+        /* flex-direction: row; */
+        /* 改变主轴的方向,元素就会按照从上到下的顺序排列 */
+        /* flex-direction: column; */
+        /* flex-wrap: wrap; */
+        /* 等于 flex-direction + flex-wrap 的简写*/
+        flex-flow: row wrap;
+        justify-content: center;
+        align-items: center;
+      }
+      /* justify-content 用于设置主轴元素的排列方式 */
+      #div2 {
+        height: 300px;
+        flex-direction: row;
+        /* 默认左对齐 justify-content: flex-start; */
+        /* justify-self: flex-start; */
+        /* 右对齐 */
+        /* justify-content: flex-end; */
+        /* 居中对齐 */
+        /* justify-content: center; */
+        /* 两端对齐 */
+        /* justify-content: space-between; */
+        /* 平均分配 */
+        justify-content: space-around;
+      }
+      span {
+        width: 150px;
+        height: 100px;
+      }
+      .item1 {
+        background-color: #2f9f4f;
+      }
+      .item2 {
+        background-color: #316273;
+      }
+      .item3 {
+        background-color: #99b348;
+      }
+
+      .item4 {
+        background-color: #816579;
+      }
+
+      #div3 {
+        display: flex;
+        flex-direction: row;
+        width: 700px;
+        height: 200px;
+      }
+      .grow1 {
+        flex-grow: 1;
+        width: 100px;
+        background-color: #81b271;
+      }
+      .grow2 {
+        flex-grow: 2;
+        width: 100px;
+        background-color: #685858;
+      }
+      .grow3 {
+        flex-grow: 1;
+        width: 100px;
+        background-color: #536f84;
+      }
+      .flex-container {
+        display:inline-flex
+      }
+    </style>
+  </head>
+  <body>
+    <p>flex主轴方向,排列顺序</p>
+    <div id="div1">
+      <span class="item1">11111111111111111111 1111111111111111111111 1111</span>
+      <span class="item2">2</span>
+      <span class="item3">3</span>
+      <span class="item3">3</span>
+      <span class="item3">3</span>
+      <span class="item3">4</span>
+    </div>
+    <p>justify-content演示</p>
+    <div id="div2">
+      <span class="item1">1</span>
+      <span class="item2">2</span>
+      <span class="item3">3</span>
+      <span class="item4">4</span>
+    </div>
+    <p>flex-grow 分配剩余空间,数值代表对剩余空间的分配比例</p>
+    <div id="div3">
+      <span class="grow1">1</span>
+      <span class="grow2">2</span>
+      <span class="grow3">3</span>
+    </div>
+    <div class="flex-container">
+      <div>Item 1</div>
+      <div>Item 2</div>
+      <div>Item 3</div>
+    </div>
+  </body>
+</html>
